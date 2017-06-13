@@ -16,6 +16,8 @@ class Promise
   end
 end
 
+##
+# Meta-programming Kernel for Syntactic Sugars
 module Kernel
   # Make fiber as async chain
   # @param [Fiber] fiber root of async chain
