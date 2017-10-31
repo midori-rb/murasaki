@@ -48,5 +48,17 @@ RSpec.describe Promise do
       async_error
       EventLoop.start
     end
+
+    describe 'Fiber' do
+      it 'should return root fiber in root fiber' do
+        expect(EventLoop.root_fiber).to eq(Fiber.current)
+      end
+
+      it 'should still return root fiber out root fiber' do
+        Fiber.new do
+          expect(EventLoop.root_fiber).not_to eq(Fiber.current)
+        end.resume
+      end
+    end
   end
 end
