@@ -13,6 +13,8 @@ module EventLoop
       @ios = Hash.new
       # IO queue
       @queue = Hash.new
+      # Root fiber
+      @root_fiber = Fiber.current
     end
 
     # Add timer in event loop
@@ -113,6 +115,11 @@ module EventLoop
     def running?
       @stop = true if @stop.nil?
       !@stop
+    end
+
+    def root_fiber
+      config if @selector.nil?
+      @root_fiber
     end
   end
 end
