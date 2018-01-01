@@ -3,6 +3,7 @@ require './lib/murasaki/version'
 Gem::Specification.new do |s|
   s.name                     = 'murasaki'
   s.version                  = Murasaki::VERSION
+  s.platform                 = Gem::Platform.local
   s.required_ruby_version    = '>=2.2.6'
   s.date                     = Time.now.strftime('%Y-%m-%d')
   s.summary                  = 'Event Kernel for Ruby'
@@ -16,4 +17,5 @@ Gem::Specification.new do |s|
   s.metadata                 = { 'issue_tracker' => 'https://github.com/heckpsi-lab/murasaki/issues' }
   s.license                  = 'MIT'
   s.add_runtime_dependency     'nio4r', '~> 2.0'
+  s.add_runtime_dependency     'helix_runtime', '~> 0.7'
 end

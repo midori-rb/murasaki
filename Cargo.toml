@@ -1,0 +1,13 @@
+[package]
+name = "murasaki"
+version = "0.0.1"
+authors = ["Delton Ding <dsh0416@gmail.com>"]
+
+[lib]
+
+crate-type = ['cdylib']
+
+[dependencies]
+helix = "*"
+mio = "0.6"
+lazy_static = "1.0"
