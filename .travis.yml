@@ -20,7 +20,7 @@ os:
 
 before_install:
   # Install Rust
-  - curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain $RUST_VERSION -y; fi
+  - curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain $RUST_VERSION -y
   - export PATH="$HOME/.cargo/bin:$PATH"
   - rustup default $RUST_VERSION
   # Install Bundler
