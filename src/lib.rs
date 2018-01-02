@@ -42,17 +42,21 @@ ruby! {
     }
 
     def _deregister(_fd: u64) {
+      panic!("Not Implemented");
     }
 
     #[ruby_name = "empty?"]
     def is_empty(&self) {
+      panic!("Not Implemented");
     }
 
     def _register(_fd: u64, _interest: Symbol) {
+      panic!("Not Implemented");
     }
 
     #[ruby_name = "_registered?"]
     def is_registered(_fd: u64) {
+      panic!("Not Implemented");
     }
 
     def _select(&self, timeout: f64) {
@@ -64,6 +68,7 @@ ruby! {
       for _event in events.iter() {
         // TODO: Deal with the event
       }
+      panic!("Not Implemented");
     }
   }
 
@@ -94,11 +99,13 @@ ruby! {
     }
 
     def readiness(&self) {
+      panic!("Not Implemented");
     }
 
     def close(&mut self) {
       // TODO: deregister first
       self.closed = true;
+      panic!("Not Implemented");
     }
 
     #[ruby_name = "closed?"]
@@ -108,13 +115,16 @@ ruby! {
 
     #[ruby_name = "readable?"]
     def is_readable(&self){
+      panic!("Not Implemented");
     }
 
     def remove_interest(&self, _interest: Symbol){
+      panic!("Not Implemented");
     }
 
     #[ruby_name = "writable?"]
     def is_writable(&self){
+      panic!("Not Implemented");
     }
   }
 }
