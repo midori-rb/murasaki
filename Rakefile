@@ -1,8 +1,15 @@
+require 'helix_runtime/build_task'
 require 'rspec/core/rake_task'
 require 'yard'
 require './lib/murasaki/version'
 
-task :default => %i(spec)
+task :spec => :build
+task :default => :spec
+
+HelixRuntime::BuildTask.new do |t|
+  t.build_root = File.expand_path("./", __dir__)
+  t.helix_lib_dir = File.expand_path("./windows_build", __dir__)
+end
 
 RSpec::Core::RakeTask.new(:spec)
 
