@@ -16,15 +16,24 @@ module EventLoop
       # Root fiber
       @root_fiber = Fiber.current
     end
+  end
+end
 
+EventLoop.config
+
+module EventLoop
+  class << self
     # Add timer in event loop
     # @param [EventLoop::Timer] timer timer to insert
     # @return [nil] nil
     def add_timer(timer)
-      config if @selector.nil?
       timer.start_time = Time.now.to_f + timer.time
       @timers << timer
       nil
+    end
+
+    def remove_timer(timer)
+      @timers.delete(timer)
     end
 
     # Register I/O event with queue protection
@@ -33,7 +42,6 @@ module EventLoop
     # @yield what to run when io callbacks
     # @return [nil] nil
     def register(io, interest=(:rw), &callback)
-      config if @selector.nil?
       if @queue[io.to_i].nil?
         @queue[io.to_i] = Array.new
         register_raw(io, interest, callback)
@@ -49,7 +57,6 @@ module EventLoop
     # @param [Proc] callback what to run when io callbacks
     # @return [nil] nil
     def register_raw(io, interest=(:rw), callback)
-      config if @selector.nil?
       @selector.register(io, interest)
       @ios[io] = { callback: callback }
       nil
@@ -70,7 +77,6 @@ module EventLoop
     # Run I/O selector once
     # @return [nil] nil
     def run_once
-      config if @selector.nil?
       @selector.select(0.2) do |monitor| # Timeout for 0.2 secs
         @ios[monitor.io][:callback].call(monitor)
       end
@@ -81,7 +87,6 @@ module EventLoop
     # Run timer once
     # @return [nil] nil
     def timer_once
-      config if @selector.nil?
       now_time = Time.now.to_f
       @timers.delete_if do |timer|
         if timer.start_time < now_time
@@ -118,7 +123,6 @@ module EventLoop
     end
 
     def root_fiber
-      config if @selector.nil?
       @root_fiber
     end
   end
