@@ -15,6 +15,7 @@ module EventLoop
       @queue = Hash.new
       # Root fiber
       @root_fiber = Fiber.current
+      nil
     end
 
     # Add timer in event loop
