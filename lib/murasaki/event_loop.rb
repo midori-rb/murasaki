@@ -67,11 +67,14 @@ module EventLoop
     # @param [IO] io io to deregister
     # @return [nil] nil
     def deregister(io)
-      fd = io.to_i
       @selector.deregister(io)
       @ios.delete(io)
-      next_register = @queue[fd].shift
-      next_register.nil? ? @queue.delete(fd) : register_raw(*next_register)
+      unless io.closed?
+        # Will it cause memory leak?
+        fd = io.fileno
+        next_register = @queue[fd].shift
+        next_register.nil? ? @queue.delete(fd) : register_raw(*next_register)
+      end
       nil
     end
 
