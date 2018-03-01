@@ -13,6 +13,24 @@ RSpec.describe EventLoop do
       EventLoop.start
       expect(answer).to eq([0, 1])
     end
+
+    it 'could cancel timer' do
+      answer = []
+      timer = EventLoop::Timer.new(1) do
+        answer << 1
+        EventLoop.stop
+      end
+      timer2 = EventLoop::Timer.new(3) do
+        answer << 2
+        EventLoop.stop
+      end
+      EventLoop.add_timer(timer)
+      EventLoop.add_timer(timer2)
+      EventLoop.remove_timer(timer)
+      answer << 0
+      EventLoop.start
+      expect(answer).to eq([0, 2])
+    end
   end
 
   describe EventLoop do

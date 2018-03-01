@@ -31,7 +31,7 @@ RSpec.describe Promise do
         Promise.new do |resolve|
           file = File.open(file, 'r')
           EventLoop.register(file, :r) do
-            data = file.read_nonblock(16384)
+            _data = file.read_nonblock(16384)
             EventLoop.deregister(file)
             resolve.call(PromiseException.new('Some Error'))
           end
