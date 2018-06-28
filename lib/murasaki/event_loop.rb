@@ -67,11 +67,25 @@ module EventLoop
     # @param [IO] io io to deregister
     # @return [nil] nil
     def deregister(io)
-      fd = io.to_i
       @selector.deregister(io)
       @ios.delete(io)
-      next_register = @queue[fd].shift
-      next_register.nil? ? @queue.delete(fd) : register_raw(*next_register)
+      unless io.closed?
+        # If the I/O closed accidentally, it should manually release the queue
+        # Otherwise, there would be a memory leak
+        fd = io.fileno
+        next_register = @queue[fd].shift
+        next_register.nil? ? @queue.delete(fd) : register_raw(*next_register)
+      end
+      nil
+    end
+
+    # Manually release queues of closed I/O
+    # if the I/O has accidentally closed
+    # @param [IO] io io to release
+    # @return [nil] nil
+    def release_queue(io)
+      fd = io.fileno
+      @queue.delete(fd)
       nil
     end
 
