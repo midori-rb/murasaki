@@ -103,12 +103,13 @@ module EventLoop
     # @return [nil] nil
     def timer_once
       now_time = Time.now.to_f
-      @timers.delete_if do |timer|
-        if timer.start_time < now_time
-          timer.callback.call
-          true
-        end
+      callbacks = []
+      @timers.reject! do |timer|
+        ticked = timer.start_time < now_time
+        callbacks << timer.callback if ticked
+        ticked
       end
+      callbacks.each { |c| c.call }
       nil
     end
 
