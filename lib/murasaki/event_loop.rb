@@ -15,6 +15,8 @@ module EventLoop
       @queue = Hash.new
       # Root fiber
       @root_fiber = Fiber.current
+      # Thread for timer
+      @timer_thread = nil
       nil
     end
   end
@@ -95,7 +97,6 @@ module EventLoop
       @selector.select(0.2) do |monitor| # Timeout for 0.2 secs
         @ios[monitor.io][:callback].call(monitor)
       end
-      timer_once
       nil
     end
 
@@ -118,6 +119,7 @@ module EventLoop
     def start
       return if running?
       @stop = false
+      @timer_thread = Thread.new { loop { sleep 0.5; timer_once }}
       until @stop
         run_once
       end
@@ -128,6 +130,7 @@ module EventLoop
     # @return [nil] nil
     def stop
       @stop = true
+      Thread.kill(@timer_thread)
       nil
     end
 
